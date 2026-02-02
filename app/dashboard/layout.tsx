@@ -1,0 +1,25 @@
+import { redirect } from "next/navigation";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { DashboardNav } from "@/components/DashboardNav";
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = await createServerSupabaseClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return (
+    <div className="flex min-h-screen">
+      <DashboardNav />
+      <main id="main" className="flex-1 overflow-auto bg-gray-50 p-6">{children}</main>
+    </div>
+  );
+}
