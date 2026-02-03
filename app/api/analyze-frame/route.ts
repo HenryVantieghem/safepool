@@ -6,11 +6,12 @@ const OPENAI_PROMPT = `You analyze pool/swimming footage. Detect signs of drowni
 - Inability to keep head above water
 - Lack of coordinated arm movement, struggling
 - Person not moving or sinking
+- Person fully submerged (underwater, not visible at surface)
 
 Respond ONLY with valid JSON in this exact format, no other text:
-{"distress": true or false, "confidence": 0-1, "description": "brief explanation"}
+{"distress": true or false, "confidence": 0-1, "description": "brief explanation", "submerged": true or false}
 
-Focus on pose and motion only. No facial identification. Be cautious—false negatives are serious.`;
+Use "submerged": true only when a person is fully underwater (not at surface). Focus on pose and motion only. No facial identification. Be cautious—false negatives are serious.`;
 
 export async function POST(request: Request) {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -20,6 +21,7 @@ export async function POST(request: Request) {
         distress: false,
         confidence: 0,
         description: "OpenAI API key not configured. Running in mock mode.",
+        submerged: false,
         mock: true,
       },
       { status: 200 }
@@ -91,8 +93,15 @@ export async function POST(request: Request) {
       distress: boolean;
       confidence: number;
       description: string;
+      submerged?: boolean;
     };
-    return NextResponse.json(parsed);
+    const result = {
+      distress: parsed.distress,
+      confidence: parsed.confidence,
+      description: parsed.description,
+      submerged: parsed.submerged ?? false,
+    };
+    return NextResponse.json(result);
   } catch (err) {
     console.error("OpenAI error:", err);
     return NextResponse.json(

@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,15 +7,54 @@
   --teal-dark: #0a3d3d;
   --aqua-light: #7eb8b8;
   --aqua-pale: #a8d4d4;
+
+  /* Design tokens – light */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --accent: #0d4f4f;
+  --accent-hover: #0a3d3d;
+  --alert: #dc2626;
+  --success: #16a34a;
+  --ring: #0d4f4f;
+}
+
+.dark {
+  --bg-primary: #18181b;
+  --bg-secondary: #09090b;
+  --bg-tertiary: #27272a;
+  --text-primary: #fafafa;
+  --text-muted: #a1a1aa;
+  --border: #3f3f46;
+  --accent: #7eb8b8;
+  --accent-hover: #a8d4d4;
+  --alert: #ef4444;
+  --success: #22c55e;
+  --ring: #7eb8b8;
 }
 
 body {
-  font-family: "DM Sans", system-ui, sans-serif;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: "Source Serif 4", Georgia, serif;
+/* Glass-style cards */
+.glass-card {
+  @apply rounded-xl border backdrop-blur-sm;
+  background-color: color-mix(in srgb, var(--bg-primary) 85%, transparent);
+  border-color: var(--border);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
